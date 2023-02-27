@@ -148,10 +148,10 @@ async def on_shutdown(app):
     await asyncio.gather(*coros)
     pcs.clear()
 
+app = web.Application()
 
 if __name__ == "__main__":
-
-    app = web.Application()
+    
     app.on_shutdown.append(on_shutdown)
     app.router.add_get("/", index)
     app.router.add_get("/client.js", javascript)
