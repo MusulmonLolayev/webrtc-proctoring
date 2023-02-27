@@ -149,9 +149,14 @@ async def on_shutdown(app):
     await asyncio.gather(*coros)
     pcs.clear()
 
-app = web.Application()
+parser = argparse.ArgumentParser(description="aiohttp server example")
+parser.add_argument('--path')
+parser.add_argument('--port')
 
 if __name__ == "__main__":
+
+    app = web.Application()
+
     
     socket_path = pathlib.Path(__file__).parent
     socket_path = socket_path / 'app.sock'
@@ -159,8 +164,11 @@ if __name__ == "__main__":
     if socket_path.exists():
         socket_path.unlink()
 
+    args = parser.parse_args()
+
+
     app.on_shutdown.append(on_shutdown)
     app.router.add_get("/", index)
     app.router.add_get("/client.js", javascript)
     app.router.add_post("/offer", offer)
-    web.run_app(app, path=str(socket_path))
+    web.run_app(app, path=str(socket_path), port=5050)
