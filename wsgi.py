@@ -150,30 +150,55 @@ async def on_shutdown(app):
     pcs.clear()
 
 
-async def app():
-    app1 = web.Application()
+# async def app():
+#     app1 = web.Application()
 
-    parser = argparse.ArgumentParser(
-        description="WebRTC audio / video / data-channels demo"
-    )
-    parser.add_argument("--cert-file", help="SSL certificate file (for HTTPS)")
-    parser.add_argument("--key-file", help="SSL key file (for HTTPS)")
-    parser.add_argument(
-        "--host", default="0.0.0.0", help="Host for HTTP server (default: 0.0.0.0)"
-    )
-    parser.add_argument(
-        "--port", type=int, default=8080, help="Port for HTTP server (default: 8080)"
-    )
-    parser.add_argument("--record-to", help="Write received media to a file."),
-    parser.add_argument("--verbose", "-v", action="count")
-    args = parser.parse_args()
+#     parser = argparse.ArgumentParser(
+#         description="WebRTC audio / video / data-channels demo"
+#     )
+#     parser.add_argument("--cert-file", help="SSL certificate file (for HTTPS)")
+#     parser.add_argument("--key-file", help="SSL key file (for HTTPS)")
+#     parser.add_argument(
+#         "--host", default="0.0.0.0", help="Host for HTTP server (default: 0.0.0.0)"
+#     )
+#     parser.add_argument(
+#         "--port", type=int, default=8080, help="Port for HTTP server (default: 8080)"
+#     )
+#     parser.add_argument("--record-to", help="Write received media to a file."),
+#     parser.add_argument("--verbose", "-v", action="count")
+#     args = parser.parse_args()
 
 
 
-    app1.on_shutdown.append(on_shutdown)
-    app1.router.add_get("/", index)
-    app1.router.add_get("/client.js", javascript)
-    app1.router.add_post("/offer", offer)
-    # web.run_app(app, path=str(socket_path), port=5050)
+#     app1.on_shutdown.append(on_shutdown)
+#     app1.router.add_get("/", index)
+#     app1.router.add_get("/client.js", javascript)
+#     app1.router.add_post("/offer", offer)
+#     # web.run_app(app, path=str(socket_path), port=5050)
 
-    return app1
+#     return app1
+
+
+app = web.Application()
+
+parser = argparse.ArgumentParser(
+    description="WebRTC audio / video / data-channels demo"
+)
+parser.add_argument("--cert-file", help="SSL certificate file (for HTTPS)")
+parser.add_argument("--key-file", help="SSL key file (for HTTPS)")
+parser.add_argument(
+    "--host", default="0.0.0.0", help="Host for HTTP server (default: 0.0.0.0)"
+)
+parser.add_argument(
+    "--port", type=int, default=8080, help="Port for HTTP server (default: 8080)"
+)
+parser.add_argument("--record-to", help="Write received media to a file."),
+parser.add_argument("--verbose", "-v", action="count")
+args = parser.parse_args()
+
+
+app.on_shutdown.append(on_shutdown)
+app.router.add_get("/", index)
+app.router.add_get("/client.js", javascript)
+app.router.add_post("/offer", offer)
+# web.run_app(app, path=str(socket_path), port=5050)
