@@ -194,7 +194,7 @@ parser.add_argument(
 )
 parser.add_argument("--record-to", help="Write received media to a file."),
 parser.add_argument("--verbose", "-v", action="count")
-args = parser.parse_args()
+args = parser.parse_known_args()
 
 
 app.on_shutdown.append(on_shutdown)
