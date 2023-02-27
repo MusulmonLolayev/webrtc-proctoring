@@ -194,6 +194,7 @@ parser.add_argument(
 )
 parser.add_argument("--record-to", help="Write received media to a file."),
 parser.add_argument("--verbose", "-v", action="count")
+parser.add_argument("--worker-class", default='aiohttp.GunicornWebWorker')
 args = parser.parse_known_args()
 
 
