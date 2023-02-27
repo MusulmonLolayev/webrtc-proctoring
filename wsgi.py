@@ -8,6 +8,7 @@ import uuid
 from time import time
 
 import cv2
+import pathlib
 from aiohttp import web
 from av import VideoFrame
 # from simple_facerec import SimpleFacerec
@@ -152,8 +153,14 @@ app = web.Application()
 
 if __name__ == "__main__":
     
+    socket_path = pathlib.Path(__file__).parent
+    socket_path = socket_path / 'app.sock'
+
+    if socket_path.exists():
+        socket_path.unlink()
+
     app.on_shutdown.append(on_shutdown)
     app.router.add_get("/", index)
     app.router.add_get("/client.js", javascript)
     app.router.add_post("/offer", offer)
-    web.run_app(app)
+    web.run_app(app, path=str(socket_path))
