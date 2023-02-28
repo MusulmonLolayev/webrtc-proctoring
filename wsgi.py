@@ -199,7 +199,7 @@ args = parser.parse_known_args()
 
 
 app.on_shutdown.append(on_shutdown)
-app.router.add_get("/", index)
+app.router.add_get("/index", index)
 app.router.add_get("/client.js", javascript)
 app.router.add_post("/offer", offer)
 # web.run_app(app, path=str(socket_path), port=5050)
