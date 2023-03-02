@@ -16,7 +16,7 @@ import cv2
 import pathlib
 from aiohttp import web
 from av import VideoFrame
-from proctoring.simple_facerec import SimpleFacerec
+# from proctoring.simple_facerec import SimpleFacerec
 
 from aiortc import MediaStreamTrack, RTCPeerConnection, RTCSessionDescription
 from aiortc.contrib.media import MediaBlackhole, MediaPlayer, MediaRecorder, MediaRelay
@@ -44,8 +44,8 @@ class VideoTransformTrack(MediaStreamTrack):
         super().__init__()  # don't forget this!
         self.track = track
         self.user_id = user_id
-        self.sfr = SimpleFacerec()
-        self.sfr.load_encoding_images("images/")
+        # self.sfr = SimpleFacerec()
+        # self.sfr.load_encoding_images("images/")
 
     async def recv(self):
         # start = time()
