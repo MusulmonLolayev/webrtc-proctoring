@@ -140,7 +140,7 @@ async def offer(request: Request):
     return {"sdp": pc.localDescription.sdp, "type": pc.localDescription.type}
 
 @app.on_event('shutdown')
-async def on_shutdown(app):
+async def on_shutdown():
     # close peer connections
     coros = [pc.close() for pc in pcs]
     await asyncio.gather(*coros)
