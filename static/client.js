@@ -15,11 +15,18 @@ function createPeerConnection() {
         sdpSemantics: 'unified-plan'
     };
 
-    config.iceServers = [{
-        urls: "turn:turn.eduni.uz:3478",
-        username: "test",
-        credential: "test123",
-    }]
+    config.iceServers = [
+        {
+            urls: "turn:turn.eduni.uz:3478",
+            username: "test",
+            credential: "test123",
+        },
+        {
+            urls: "stun:stun.eduni.uz:5349",
+            username: "test",
+            credential: "test123",
+        },
+    ]
 
     pc = new RTCPeerConnection(config);
 
