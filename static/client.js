@@ -16,11 +16,11 @@ function createPeerConnection() {
     };
 
     config.iceServers = [
-        {
-            urls: "turn:turn.eduni.uz:3478",
-            username: "test",
-            credential: "test123",
-        },
+        // {
+        //     urls: "turn:turn.eduni.uz:3478",
+        //     username: "test",
+        //     credential: "test123",
+        // },
         {
             urls: "stun:stun.eduni.uz:5349",
             username: "test",
@@ -44,6 +44,12 @@ function createPeerConnection() {
     pc.addEventListener('signalingstatechange', function() {
         signalingLog.textContent += ' -> ' + pc.signalingState;
     }, false);
+
+    // pc.addEventListener(
+    //     "icecandidate",
+    //     (e) => pc.canTrickleIceCandidates && sendCandidateToPeer(e.candidate)
+    //   );
+
     signalingLog.textContent = pc.signalingState;
 
     // connect audio / video
@@ -126,16 +132,42 @@ function start() {
 
 
     var constraints = {
-        audio: true,
-        video: true
+        
     };
 
+    const supports = navigator.mediaDevices.getSupportedConstraints();
+    console.log(supports)
+    var constraints = {}
+
+    if (
+        !supports["width"] ||
+        !supports["height"] ||
+        !supports["frameRate"] ||
+        !supports["facingMode"]
+        ) {
+        // We're missing needed properties, so handle that error.
+        } else {
+        constraints = {
+            audio: true,
+            video: {
+                width: { min: 320, ideal: 320, max: 680 },
+                height: { min: 240, ideal: 240, max: 420 },
+                aspectRatio: 1.777777778,
+                frameRate: { max: 10 },
+                facingMode: { exact: "user" }   
+            }
+        };
+    }
+
+    console.log(constraints)
 
     if (constraints.audio || constraints.video) {
         if (constraints.video) {
             document.getElementById('media').style.display = 'block';
         }
-        navigator.mediaDevices.getUserMedia(constraints).then(function(stream) {
+        navigator.mediaDevices
+        .getUserMedia(constraints)
+        .then(function(stream) {
             stream.getTracks().forEach(function(track) {
                 pc.addTrack(track, stream);
             });
