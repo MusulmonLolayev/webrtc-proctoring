@@ -22,7 +22,7 @@ function createPeerConnection() {
         //     credential: "test123",
         // },
         {
-            urls: "stun:stun.eduni.uz:5349",
+            urls: "stun:stun.eduni.uz:3478",
             username: "test",
             credential: "test123",
         },
