@@ -132,7 +132,8 @@ function start() {
 
 
     var constraints = {
-        
+        audio: true,
+        video: true
     };
 
     const supports = navigator.mediaDevices.getSupportedConstraints();
