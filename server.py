@@ -1,9 +1,8 @@
-import argparse
 import asyncio
-import json
+from utils.logger import LogConfig
+from logging.config import dictConfig
 import logging
 import os
-import ssl
 import uuid
 from time import time
 
@@ -12,18 +11,13 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
-import cv2
-import pathlib
-from aiohttp import web
-from av import VideoFrame
-# from proctoring.simple_facerec import SimpleFacerec
+from proctoring.simple_facerec import SimpleFacerec
 
 from aiortc import MediaStreamTrack, RTCPeerConnection, RTCSessionDescription
-from aiortc.contrib.media import MediaBlackhole, MediaPlayer, MediaRecorder, MediaRelay
+from aiortc.contrib.media import MediaBlackhole, MediaRelay
 
 ROOT = os.path.dirname(__file__)
 
-logger = logging.getLogger("pc")
 pcs = set()
 relay = MediaRelay()
 
@@ -31,6 +25,9 @@ app = FastAPI()
 app.mount("/static", StaticFiles(directory="static"), name="static")
 
 templates = Jinja2Templates(directory="templates")
+
+dictConfig(LogConfig().dict())
+logger = logging.getLogger("proctoring.log")
 
 
 class VideoTransformTrack(MediaStreamTrack):
@@ -44,32 +41,37 @@ class VideoTransformTrack(MediaStreamTrack):
         super().__init__()  # don't forget this!
         self.track = track
         self.user_id = user_id
-        # self.sfr = SimpleFacerec()
-        # self.sfr.load_encoding_images("images/")
+        self.sfr = SimpleFacerec()
+        self.sfr.load_encoding_images("images/")
 
     async def recv(self):
-        # start = time()
+        start = time()
         frame = await self.track.recv()
-        # end = time()
-        # print("Frame recv: ", end - start)
-        # start = time()
-        # img = frame.to_ndarray(format="rgb24")
-        # end = time()
-        # print("Time for rgb24: ", end - start)
+        end = time()
+        print("Frame recv: ", end - start)
+        logger.info(f"Frame recv: {end - start}")
+        start = time()
+        img = frame.to_ndarray(format="rgb24")
+        end = time()
+        print("Time for rgb24: ", end - start)
+        logger.info(f"Time for rgb24:  {end - start}")
         # Detect faces
-        # start = time()
-        # face_location, face_names = self.sfr.detect_known_faces(img)
-        # end = time()
-        # print("Time for rec: ", end - start)
-        # for face_loc, name in zip(face_location, face_names):
-        #     y1, x1, y2, x2 = face_loc[0], face_loc[1], face_loc[2], face_loc[3]
-        #     print(name, self.user_id)
-        #     if name.lower() == self.user_id.lower():
-        #         text = "Tasdiqlandi"
-        #         print("True")
-        #     else:
-        #         text = "Tasdiqlanmadi! Qayta urinib ko'ring"
-        #         print("False")
+        start = time()
+        face_location, face_names = self.sfr.detect_known_faces(img)
+        end = time()
+        print("Time for rec: ", end - start)
+        logger.info(f"Time for rec: {end - start}")
+        for face_loc, name in zip(face_location, face_names):
+            y1, x1, y2, x2 = face_loc[0], face_loc[1], face_loc[2], face_loc[3]
+            print(name, self.user_id)
+            logger.info(f"{name} -- {self.user_id}")
+
+            if name.lower() == self.user_id.lower():
+                text = "Tasdiqlandi"
+                print("True")
+            else:
+                text = "Tasdiqlanmadi! Qayta urinib ko'ring"
+                print("False")
 
         return frame
 
