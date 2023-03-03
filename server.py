@@ -56,22 +56,22 @@ class VideoTransformTrack(MediaStreamTrack):
         print("Time for rgb24: ", end - start)
         logger.info(f"Time for rgb24:  {end - start}")
         # Detect faces
-        start = time()
-        face_location, face_names = self.sfr.detect_known_faces(img)
-        end = time()
-        print("Time for rec: ", end - start)
-        logger.info(f"Time for rec: {end - start}")
-        for face_loc, name in zip(face_location, face_names):
-            y1, x1, y2, x2 = face_loc[0], face_loc[1], face_loc[2], face_loc[3]
-            print(name, self.user_id)
-            logger.info(f"{name} -- {self.user_id}")
+        # start = time()
+        # face_location, face_names = self.sfr.detect_known_faces(img)
+        # end = time()
+        # print("Time for rec: ", end - start)
+        # logger.info(f"Time for rec: {end - start}")
+        # for face_loc, name in zip(face_location, face_names):
+        #     y1, x1, y2, x2 = face_loc[0], face_loc[1], face_loc[2], face_loc[3]
+        #     print(name, self.user_id)
+        #     logger.info(f"{name} -- {self.user_id}")
 
-            if name.lower() == self.user_id.lower():
-                text = "Tasdiqlandi"
-                print("True")
-            else:
-                text = "Tasdiqlanmadi! Qayta urinib ko'ring"
-                print("False")
+        #     if name.lower() == self.user_id.lower():
+        #         text = "Tasdiqlandi"
+        #         print("True")
+        #     else:
+        #         text = "Tasdiqlanmadi! Qayta urinib ko'ring"
+        #         print("False")
 
         return frame
 
